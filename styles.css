@@ -82,6 +82,11 @@ body,
     outline: 0.5rem solid #f29727;
     background-color: #f2be22;
     position: relative;
+    cursor: pointer;
+}
+
+.cell:hover {
+    background-color: #ffce3b;
 }
 
 i {
