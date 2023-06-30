@@ -1,9 +1,30 @@
+window.onload = function () {
+    Gameboard.startMenu();
+};
+
 const wrapper = document.createElement("div");
 wrapper.classList.add("wrapper");
 document.body.appendChild(wrapper);
 
+// const winScreen = document.createElement("div");
+// winScreen.classList.add("win_screen", "invisible");
+// wrapper.appendChild(winScreen);
+
+// const newGameButton = document.createElement("button");
+// newGameButton.classList.add("newGameButton");
+// winScreen.appendChild(newGameButton);
+// newGameButton.innerText = "Start Again";
+
 const Gameboard = (function () {
     let gameArray = [];
+
+    let startMenu = function () {
+        const startButton = document.createElement("button");
+        startButton.classList.add("start_button");
+        wrapper.appendChild(startButton);
+        startButton.innerText = "Start Game";
+        startButton.addEventListener("click", setGameboard);
+    };
 
     let setGameboard = function () {
         const gameboard = document.createElement("div");
@@ -28,7 +49,7 @@ const Gameboard = (function () {
     };
 
     return {
-        setGameboard,
+        startMenu,
     };
 })();
 
@@ -69,15 +90,33 @@ const Gameplay = (function () {
         return winArr;
     };
 
+    let showWinscreen = function (phrase) {
+        const winScreen = document.createElement("div");
+        winScreen.classList.add("win_screen");
+        wrapper.appendChild(winScreen);
+        winScreen.innerText = phrase;
+
+        const newGameButton = document.createElement("button");
+        newGameButton.classList.add("newGameButton");
+        winScreen.appendChild(newGameButton);
+        newGameButton.innerText = "Start Again";
+    };
+
     let winCheckOne = function (indicesArray) {
+        let winPhrase = "Player 1 wins!";
         if (arrayCompare(indicesArray).includes(true)) {
-            alert("player one win!");
+            // winScreen.classList.remove("invisible");
+            // winScreen.innerText = "Player one wins!";
+            showWinscreen(winPhrase);
         }
     };
 
     let winCheckTwo = function (indicesArray) {
+        let winPhrase = "Player 2 wins!";
         if (arrayCompare(indicesArray).includes(true)) {
-            alert("player two win!");
+            // winScreen.classList.remove("invisible");
+            // winScreen.innerText = "Player two wins!";
+            showWinscreen(winPhrase);
         }
     };
 
@@ -99,11 +138,15 @@ function Player(playerState, isAI) {
         if (player === "one") {
             cell.innerHTML = _xmark;
             indices.push(i);
-            Gameplay.winCheckOne(indices);
+            setTimeout(function () {
+                Gameplay.winCheckOne(indices);
+            }, 1000);
         } else if (player === "two") {
             cell.innerHTML = _omark;
             indices.push(i);
-            Gameplay.winCheckTwo(indices);
+            setTimeout(function () {
+                Gameplay.winCheckTwo(indices);
+            }, 1000);
         }
     };
 

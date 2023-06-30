@@ -35,21 +35,24 @@ body,
     color: white;
     font-size: 2rem;
 
-    top: 58%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.opponent_button {
-    width: 10rem;
-    height: 4rem;
-    cursor: pointer;
-    border: transparent;
-    border-radius: 0.5rem;
-    background-color: #f2be22;
-    color: white;
-    font-size: 1.4rem;
+.newGameButton {
     position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15rem;
+    height: 6rem;
+    font-size: 2rem;
+    background-color: #eb6600ec;
+    border-radius: 0.5rem;
+    border: transparent;
+    color: #fff6f4d8;
+    cursor: pointer;
 }
 
 .one {
@@ -87,6 +90,24 @@ body,
 
 .cell:hover {
     background-color: #ffce3b;
+}
+
+.win_screen {
+    position: absolute;
+    width: 36rem;
+    height: 20rem;
+    background-color: #ff862a;
+    border: 8px solid #c25400;
+    z-index: 2;
+
+    color: #fff6f4d8;
+    font-size: 4rem;
+    text-align: center;
+    line-height: 12rem;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 i {
