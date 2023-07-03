@@ -39,14 +39,20 @@ const Gameboard = (function () {
         }
     };
 
+    let removeGameboard = function () {
+        const gameboard = document.querySelector(".gameboard");
+        gameboard.remove();
+    };
+
     return {
         startMenu,
         setGameboard,
+        removeGameboard,
     };
 })();
 
 const Gameplay = (function () {
-    let turn = 0;
+    let turn = 1;
     let hasAI = false;
     let winCombos = [
         [0, 1, 2],
@@ -58,14 +64,18 @@ const Gameplay = (function () {
         [0, 4, 8],
         [2, 4, 6],
     ];
+    let winPhrase = " wins!";
 
     let currentTurn = function (cell, i) {
-        if (turn === 0) {
-            playerOne.markCell(cell, i);
-            turn = 1;
-        } else if (turn === 1 && hasAI === false) {
+        console.log(turn);
+        if (turn === 9) {
+            showTiescreen("It's a tie, babay!");
+        } else if (turn % 2 === 0) {
             playerTwo.markCell(cell, i);
-            turn = 0;
+            turn++;
+        } else if (turn % 2 !== 0 && hasAI === false) {
+            playerOne.markCell(cell, i);
+            turn++;
         }
     };
 
@@ -93,44 +103,38 @@ const Gameplay = (function () {
         winScreen.appendChild(newGameButton);
         newGameButton.innerText = "Start Again";
         newGameButton.addEventListener("click", function () {
-            alert("create a new game lul");
-            // newGame(playerOne, playerTwo);
+            newGame(playerOne, playerTwo);
         });
     };
 
-    // let removeWinscreen = function () {
-    //     const winScreen = document.querySelector(".win_screen");
-    //     winScreen.remove();
-    // };
+    let removeWinscreen = function () {
+        const winScreen = document.querySelector(".win_screen");
+        winScreen.remove();
+    };
 
-    let winCheckOne = function (indicesArray) {
-        let winPhrase = "Player 1 wins!";
+    let showTiescreen = function (phrase) {
+        showWinscreen(phrase); // yeah
+    };
+
+    let winCheck = function (indicesArray, playerNumber) {
         if (arrayCompare(indicesArray).includes(true)) {
-            showWinscreen(winPhrase);
+            showWinscreen(playerNumber + winPhrase);
         }
     };
 
-    let winCheckTwo = function (indicesArray) {
-        let winPhrase = "Player 2 wins!";
-        if (arrayCompare(indicesArray).includes(true)) {
-            showWinscreen(winPhrase);
-        }
+    let newGame = function (firstPlayer, secondPlayer) {
+        turn = 1;
+        firstPlayer.indices = [];
+        secondPlayer.indices = [];
+        removeWinscreen();
+        Gameboard.removeGameboard();
+        Gameboard.setGameboard();
     };
-
-    // let newGame = function (firstPlayer, secondPlayer) {
-    //     turn = 0;
-    //     firstPlayer.indices = [];
-    //     secondPlayer.indices = [];
-    //     removeWinscreen();
-    //     Gameboard.removeGameboard();
-    //     Gameboard.setGameboard();
-    // };
 
     return {
         currentTurn,
-        winCheckOne,
-        winCheckTwo,
-        // newGame,
+        winCheck,
+        newGame,
     };
 })();
 
@@ -142,15 +146,14 @@ function Player(playerState, isAI) {
     let indices = [];
 
     let markCell = function (cell, i) {
-        if (player === "one") {
+        if (player === "Player 1") {
             cell.innerHTML = _xmark;
-            indices.push(i);
-            Gameplay.winCheckOne(indices);
-        } else if (player === "two") {
+        } else if (player === "Player 2") {
             cell.innerHTML = _omark;
-            indices.push(i);
-            Gameplay.winCheckTwo(indices);
         }
+
+        this.indices.push(i);
+        Gameplay.winCheck(this.indices, player);
     };
 
     return {
@@ -159,5 +162,5 @@ function Player(playerState, isAI) {
     };
 }
 
-const playerOne = Player("one", false);
-const playerTwo = Player("two", false);
+const playerOne = Player("Player 1", false);
+const playerTwo = Player("Player 2", false);
